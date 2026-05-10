@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -229,6 +230,126 @@ body{background:var(--bg);color:var(--fg);min-height:100vh}
 .empty-title{font-weight:600;margin-bottom:4px}
 .empty-sub{font-size:.875rem;color:var(--muted)}
 .no-data{display:flex;align-items:center;justify-content:center;height:200px;color:var(--muted);font-size:.875rem}
+
+/* ── Bottom Nav (mobile only) ── */
+#bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(22,27,34,.96);border-top:1px solid var(--border);padding:6px 0 calc(6px + env(safe-area-inset-bottom));-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.bnav-inner{display:flex;align-items:center;justify-content:space-around}
+.bnav-tab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 20px;border:none;background:transparent;color:var(--muted);font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;transition:color .15s;min-width:72px;-webkit-tap-highlight-color:transparent}
+.bnav-tab .bnav-icon{font-size:22px;line-height:1.2;transition:transform .15s}
+.bnav-tab.active{color:var(--primary)}
+.bnav-tab.active .bnav-icon{transform:scale(1.1)}
+
+/* ── Global touch improvements ── */
+*{-webkit-tap-highlight-color:transparent}
+
+/* ── Mobile: ≤ 640px ── */
+@media(max-width:640px){
+
+  /* Bottom nav visible */
+  #bottom-nav{display:block}
+
+  /* Hide top nav tabs & user; keep logo */
+  .nav-tabs{display:none}
+  .nav-user{display:none}
+  .nav-inner{height:50px;padding:0 16px}
+
+  /* Page content — extra bottom padding clears bottom nav */
+  .page-content{padding:20px 14px calc(76px + env(safe-area-inset-bottom))}
+
+  /* Setup card */
+  .setup-card{padding:24px 18px;border-radius:12px}
+  .logo-text{font-size:1.4rem}
+  .setup-icon{width:58px;height:58px;font-size:26px}
+  .setup-logo{margin-bottom:22px}
+
+  /* iOS zoom prevention — inputs must be ≥ 16px to avoid auto-zoom */
+  .form-group input,
+  .form-group select,
+  .filter-right select{font-size:16px!important}
+
+  /* Form rows stack on mobile */
+  .form-row{grid-template-columns:1fr}
+
+  /* Stats */
+  .stat-value{font-size:1.2rem}
+  .stat-card{padding:14px}
+  .stat-icon{width:32px;height:32px;font-size:14px}
+
+  /* Progress */
+  .progress-card{padding:16px}
+  .progress-pct-val{font-size:1.3rem}
+
+  /* Bento */
+  .bento-card{padding:16px}
+  .bento-title{margin-bottom:12px;font-size:.82rem}
+
+  /* Charts */
+  .chart-wrap{height:190px}
+  .chart-legend{gap:10px;flex-wrap:wrap;justify-content:center}
+  .legend-item{font-size:.7rem}
+
+  /* Summary grid — remove fixed height that breaks on mobile */
+  .summary-grid{height:auto}
+  .sum-val{font-size:1rem}
+
+  /* Page header */
+  .page-title{font-size:1.2rem}
+  .page-header{margin-bottom:16px;align-items:center}
+
+  /* Credit cards */
+  .cc-btn{width:38px;height:38px;font-size:15px}
+  .cc-name{font-size:1rem;margin-bottom:12px}
+  .cc-bal{font-size:1.1rem}
+  .cc-face{padding:16px}
+
+  /* Expense delete — always visible on touch (no hover on mobile) */
+  .exp-del{opacity:.55}
+  .exp-row:hover .exp-del{opacity:.55}
+
+  /* Empty state */
+  .empty-state{padding:32px 16px}
+
+  /* Modals — slide up from bottom on mobile */
+  .modal-overlay{align-items:flex-end;padding:0}
+  .modal{border-radius:20px 20px 0 0;max-height:90vh;max-width:100%;width:100%}
+  .modal-hd{padding:18px 16px 0}
+  .modal-body{padding:14px 16px calc(20px + env(safe-area-inset-bottom))}
+
+  /* Toast — sits above bottom nav */
+  #toast{bottom:calc(70px + env(safe-area-inset-bottom));right:16px;left:16px;text-align:center;font-size:.82rem;padding:10px 14px}
+
+  /* Buttons — bigger tap targets */
+  .btn{min-height:48px}
+  .btn-sm{min-height:40px}
+  .qa-btn{min-height:56px}
+
+  /* Filter bar */
+  .filter-bar{gap:8px}
+  .filter-right{flex-wrap:wrap}
+}
+
+/* ── Very small phones: ≤ 390px ── */
+@media(max-width:390px){
+  .page-content{padding:14px 12px calc(76px + env(safe-area-inset-bottom))}
+  .setup-card{padding:20px 14px}
+  .stats-grid{gap:8px}
+  .stat-value{font-size:1.05rem}
+  .stat-card{padding:12px}
+  .bento-card{padding:12px}
+  .chart-wrap{height:170px}
+  .btn-row{flex-direction:column}
+  .btn-row .btn{width:100%}
+  .sum-val{font-size:.95rem}
+  .page-title{font-size:1.05rem}
+  .feature-grid{grid-template-columns:1fr}
+  .feature-item{font-size:.78rem}
+}
+
+/* ── Notch / Dynamic Island safe areas ── */
+@supports(padding:max(0px)){
+  #navbar{padding-top:env(safe-area-inset-top)}
+  .nav-inner{height:max(50px, calc(44px + env(safe-area-inset-top) * 0))}
+}
 </style>
 </head>
 <body>
@@ -246,13 +367,6 @@ body{background:var(--bg);color:var(--fg);min-height:100vh}
       <label>Your Name</label>
       <input type="text" id="inp-name" placeholder="Enter your name…" autocomplete="off">
     </div>
-    <div class="form-group">
-      <label>Google Apps Script URL
-        <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.8rem"> — optional (enables cloud sync)</span>
-      </label>
-      <input type="url" id="inp-gas" placeholder="https://script.google.com/macros/s/…/exec">
-    </div>
-
     <button class="btn btn-primary btn-block" id="btn-start" disabled>Get Started →</button>
 
     <div class="feature-grid" style="margin-top:16px">
@@ -262,13 +376,23 @@ body{background:var(--bg);color:var(--fg);min-height:100vh}
       <div class="feature-item">🧾 Expense logging</div>
     </div>
     <div style="text-align:center;font-size:.75rem;color:var(--muted);margin-top:12px">
-      Data is stored locally in your browser. GAS URL enables cloud backup &amp; sync.
+      Data is stored locally in your browser and synced to the cloud.
     </div>
   </div>
 </div>
 
 <!-- ═══ APP SCREEN ═══ -->
 <div id="app" class="hidden">
+
+  <!-- Bottom nav (mobile only) -->
+  <nav id="bottom-nav">
+    <div class="bnav-inner">
+      <button class="bnav-tab active" data-page="dashboard"><span class="bnav-icon">📊</span>Dashboard</button>
+      <button class="bnav-tab" data-page="cards"><span class="bnav-icon">💳</span>Cards</button>
+      <button class="bnav-tab" data-page="expenses"><span class="bnav-icon">🧾</span>Expenses</button>
+    </div>
+  </nav>
+
   <nav id="navbar">
     <div class="nav-inner">
       <span class="nav-logo"><span class="accent">The Bet's</span> Tracker</span>
@@ -497,7 +621,8 @@ const today= () => new Date().toISOString().split('T')[0];
 // ════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════
-const S = { user:'', gas:'', cards:[], expenses:[], payments:[] };
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxPUIa5RIdINiID8zyIjJhH35rxhDy5qNCqq12t27GnqeSsFVMXcnY5i0RJjPkCja22/exec';
+const S = { user:'', gas: GAS_URL, cards:[], expenses:[], payments:[] };
 const charts = {};
 
 // ════════════════════════════════════════
@@ -505,7 +630,7 @@ const charts = {};
 // ════════════════════════════════════════
 function loadLocal() {
   S.user     = localStorage.getItem('bets_user') || '';
-  S.gas      = localStorage.getItem('bets_gas')  || '';
+  S.gas      = GAS_URL;
   S.cards    = JSON.parse(localStorage.getItem('bets_cards')    || '[]');
   S.expenses = JSON.parse(localStorage.getItem('bets_expenses') || '[]');
   S.payments = JSON.parse(localStorage.getItem('bets_payments') || '[]');
@@ -613,12 +738,16 @@ async function togglePaid(id) {
 function navigate(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.bnav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
   const tab = document.querySelector(`.nav-tab[data-page="${page}"]`);
   if (tab) tab.classList.add('active');
+  const btab = document.querySelector(`.bnav-tab[data-page="${page}"]`);
+  if (btab) btab.classList.add('active');
   if (page==='dashboard') renderDashboard();
   if (page==='cards')     renderCards();
   if (page==='expenses')  renderExpenses();
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 // ════════════════════════════════════════
@@ -980,11 +1109,9 @@ inpName.addEventListener('input', () => btnStart.disabled = !inpName.value.trim(
 
 btnStart.addEventListener('click', async () => {
   const name = inpName.value.trim();
-  const gas  = document.getElementById('inp-gas').value.trim();
   if (!name) return;
-  S.user = name; S.gas = gas;
+  S.user = name;
   localStorage.setItem('bets_user', name);
-  localStorage.setItem('bets_gas', gas);
   await launch();
 });
 
@@ -1000,7 +1127,6 @@ async function launch() {
   loadLocal();
   if (S.user) {
     document.getElementById('inp-name').value = S.user;
-    document.getElementById('inp-gas').value  = S.gas;
     await launch();
   }
 })();
