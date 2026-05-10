@@ -282,6 +282,10 @@ body{background:var(--bg);color:var(--fg);min-height:100vh}
 
 /* ── Global touch improvements ── */
 *{-webkit-tap-highlight-color:transparent}
+button, [data-nav], [data-page], [data-toggle], [data-pay], [data-edit], [data-del], [data-exp-del], [data-exp-edit], [data-close], .exp-cat-icon, .stat-card[data-nav], .bnav-tab, .nav-tab, .qa-btn, .cc-pay-btn, .cc-btn {
+  touch-action: manipulation;
+  cursor: pointer;
+}
 
 /* ── Mobile: ≤ 640px ── */
 @media(max-width:640px){
@@ -1226,59 +1230,74 @@ function toast(msg, type='success') {
 // ════════════════════════════════════════
 // EVENT DELEGATION
 // ════════════════════════════════════════
-document.addEventListener('click', e => {
-  const t = e.target;
+function handleInteraction(t) {
+  // Bottom nav tabs (mobile) — must come before nav-tab check
+  const bnavTab = t.closest('.bnav-tab');
+  if (bnavTab && bnavTab.dataset.page) { navigate(bnavTab.dataset.page); return true; }
 
   // Nav logo → dashboard
   const logoBtn = t.closest('.nav-logo-btn');
-  if (logoBtn) { navigate(logoBtn.dataset.page || 'dashboard'); return; }
+  if (logoBtn) { navigate(logoBtn.dataset.page || 'dashboard'); return true; }
 
-  // Nav tabs
+  // Top nav tabs
   const tab = t.closest('.nav-tab');
-  if (tab) { navigate(tab.dataset.page); return; }
+  if (tab && tab.dataset.page) { navigate(tab.dataset.page); return true; }
 
-  // Quick action / view all / stat cards
+  // Quick action / view all / stat cards (data-nav)
   const nav = t.closest('[data-nav]');
-  if (nav) { navigate(nav.dataset.nav); return; }
+  if (nav) { navigate(nav.dataset.nav); return true; }
 
   // Modal close
   const close = t.closest('[data-close]');
-  if (close) { closeModal(close.dataset.close); return; }
+  if (close) { closeModal(close.dataset.close); return true; }
 
   // Close on overlay click
-  if (t.classList.contains('modal-overlay')) {
-    t.classList.add('hidden'); return;
-  }
+  if (t.classList.contains('modal-overlay')) { t.classList.add('hidden'); return true; }
 
   // Add card button
-  if (t.id==='btn-add-card' || t.closest('#btn-add-card')) { openAddCard(); return; }
+  if (t.closest('#btn-add-card')) { openAddCard(); return true; }
 
   // Add expense button
-  if (t.id==='btn-add-expense' || t.closest('#btn-add-expense')) { openAddExpense(); return; }
+  if (t.closest('#btn-add-expense')) { openAddExpense(); return true; }
 
   // Edit card
   const editBtn = t.closest('[data-edit]');
-  if (editBtn) { openEditCard(editBtn.dataset.edit); return; }
+  if (editBtn) { openEditCard(editBtn.dataset.edit); return true; }
 
   // Delete card
   const delBtn = t.closest('[data-del]');
-  if (delBtn) { deleteCard(delBtn.dataset.del); return; }
+  if (delBtn) { deleteCard(delBtn.dataset.del); return true; }
 
   // Record payment
   const payBtn = t.closest('[data-pay]');
-  if (payBtn) { openPaymentModal(payBtn.dataset.pay); return; }
+  if (payBtn) { openPaymentModal(payBtn.dataset.pay); return true; }
 
   // Toggle expense paid
   const toggle = t.closest('[data-toggle]');
-  if (toggle) { togglePaid(toggle.dataset.toggle); return; }
+  if (toggle) { togglePaid(toggle.dataset.toggle); return true; }
 
   // Delete expense
   const expDel = t.closest('[data-exp-del]');
-  if (expDel) { deleteExpense(expDel.dataset.expDel); return; }
+  if (expDel) { deleteExpense(expDel.dataset.expDel); return true; }
 
   // Edit expense
   const expEdit = t.closest('[data-exp-edit]');
-  if (expEdit) { openEditExpense(expEdit.dataset.expEdit); return; }
+  if (expEdit) { openEditExpense(expEdit.dataset.expEdit); return true; }
+
+  return false;
+}
+
+// Use touchend for snappy mobile response, fallback to click
+let _touchMoved = false;
+document.addEventListener('touchstart', e => { _touchMoved = false; }, {passive: true});
+document.addEventListener('touchmove',  () => { _touchMoved = true; },  {passive: true});
+document.addEventListener('touchend', e => {
+  if (_touchMoved) return; // ignore swipes
+  const t = e.target;
+  if (handleInteraction(t)) e.preventDefault(); // prevent ghost click
+});
+document.addEventListener('click', e => {
+  handleInteraction(e.target);
 });
 
 document.getElementById('exp-filter').addEventListener('change', renderExpenses);
@@ -1290,9 +1309,6 @@ document.addEventListener('keydown', e => {
     if (card) { e.preventDefault(); navigate(card.dataset.nav); }
   }
 });
-
-// iOS: ensure :active fires immediately on stat cards (touch)
-document.addEventListener('touchstart', () => {}, {passive: true});
 
 // ════════════════════════════════════════
 // SETUP & INIT
