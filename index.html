@@ -137,8 +137,9 @@ body{background:var(--bg);color:var(--fg);min-height:100vh}
 .cc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .cc-issuer{font-size:.65rem;font-weight:900;text-transform:uppercase;letter-spacing:.12em;background:rgba(255,255,255,.18);padding:3px 10px;border-radius:4px}
 .cc-btns{display:flex;gap:5px}
-.cc-btn{width:30px;height:30px;border-radius:7px;border:none;background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;transition:background .15s}
+.cc-btn{width:30px;height:30px;border-radius:7px;border:none;background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;transition:background .15s;-webkit-tap-highlight-color:transparent}
 .cc-btn:hover{background:rgba(255,255,255,.28)}
+.cc-btn:active{background:rgba(255,255,255,.4);transform:scale(.93)}
 .cc-name{font-size:1.1rem;font-weight:900;margin-bottom:18px}
 .cc-foot{display:flex;align-items:flex-end;justify-content:space-between}
 .cc-field-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.06em;opacity:.6;margin-bottom:3px}
@@ -147,8 +148,9 @@ body{background:var(--bg);color:var(--fg);min-height:100vh}
 .cc-bar-bg{height:5px;background:rgba(255,255,255,.2);border-radius:99px;margin:12px 0 6px;overflow:hidden}
 .cc-bar-fill{height:100%;border-radius:99px;background:rgba(255,255,255,.75);transition:width .6s}
 .cc-util{font-size:.7rem;opacity:.6}
-.cc-pay-btn{display:block;width:100%;padding:9px;background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.85);font-size:.8rem;font-weight:600;text-align:center;transition:background .15s;margin-top:14px;border-radius:7px}
+.cc-pay-btn{display:block;width:100%;padding:9px;background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.85);font-size:.8rem;font-weight:600;text-align:center;transition:background .15s;margin-top:14px;border-radius:7px;-webkit-tap-highlight-color:transparent}
 .cc-pay-btn:hover{background:rgba(255,255,255,.22)}
+.cc-pay-btn:active{background:rgba(255,255,255,.32)}
 
 /* ── Payment History ── */
 .cc-history{background:var(--card);border-top:1px solid rgba(255,255,255,.07)}
@@ -197,7 +199,8 @@ body{background:var(--bg);color:var(--fg);min-height:100vh}
 .exp-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);transition:background .1s}
 .exp-row:last-child{border-bottom:none}
 .exp-row:hover{background:rgba(255,255,255,.03)}
-.exp-cat-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.exp-cat-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;cursor:pointer;transition:transform .1s,opacity .15s;-webkit-tap-highlight-color:transparent}
+.exp-cat-icon:active{transform:scale(.88);opacity:.7}
 .exp-info{flex:1;min-width:0;cursor:pointer}
 .exp-name{font-size:.875rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .exp-name.paid{text-decoration:line-through;color:var(--muted)}
@@ -232,7 +235,7 @@ body{background:var(--bg);color:var(--fg);min-height:100vh}
 .exp-edit{width:30px;height:30px;border-radius:6px;border:none;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:13px;opacity:0;transition:all .15s;flex-shrink:0}
 .exp-row:hover .exp-edit{opacity:1}
 .exp-edit:hover{background:rgba(139,92,246,.15);color:var(--primary)}
-@media(max-width:640px){.exp-edit{opacity:.55}.exp-row:hover .exp-edit{opacity:.55}}
+/* mobile exp-edit handled inside the 640px block below */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
 .modal{background:var(--card);border:1px solid var(--border);border-radius:14px;width:100%;max-width:430px;max-height:92vh;overflow-y:auto}
 .modal-hd{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between}
@@ -265,7 +268,11 @@ body{background:var(--bg);color:var(--fg);min-height:100vh}
 /* ── Clickable stat cards ── */
 .stat-card[data-nav]{cursor:pointer;transition:background .15s,transform .1s,box-shadow .15s}
 .stat-card[data-nav]:hover{background:#1e2530;box-shadow:0 0 0 1px var(--primary);transform:translateY(-1px)}
-.stat-card[data-nav]:active{transform:translateY(0)}
+.stat-card[data-nav]:active{transform:translateY(0);background:#1e2530;box-shadow:0 0 0 1px var(--primary)}
+@media(max-width:640px){
+  .stat-card[data-nav]{-webkit-tap-highlight-color:transparent}
+  .stat-card[data-nav]:active{transform:scale(.97);background:#1e2530;box-shadow:0 0 0 2px var(--primary)}
+}
 
 /* ── Nav SVG icons ── */
 .nav-tab svg{width:15px;height:15px;flex-shrink:0}
@@ -331,14 +338,24 @@ body{background:var(--bg);color:var(--fg);min-height:100vh}
   .page-header{margin-bottom:16px;align-items:center}
 
   /* Credit cards */
-  .cc-btn{width:38px;height:38px;font-size:15px}
+  .cc-btn{width:44px;height:44px;font-size:15px}
   .cc-name{font-size:1rem;margin-bottom:12px}
   .cc-bal{font-size:1.1rem}
   .cc-face{padding:16px}
+  .cc-pay-btn{padding:12px;font-size:.875rem;min-height:44px}
 
-  /* Expense delete — always visible on touch (no hover on mobile) */
-  .exp-del{opacity:.55}
-  .exp-row:hover .exp-del{opacity:.55}
+  /* Expense delete & edit — always visible on touch (no hover on mobile) */
+  .exp-del{opacity:.7}
+  .exp-row:hover .exp-del{opacity:.7}
+  .exp-edit{opacity:.7}
+  .exp-row:hover .exp-edit{opacity:.7}
+
+  /* Bigger tap targets for expense action buttons */
+  .exp-del,.exp-edit{width:38px;height:38px;border-radius:9px}
+
+  /* Expense category icon — make it tappable (toggle paid) */
+  .exp-cat-icon{cursor:pointer;transition:transform .1s,opacity .15s}
+  .exp-cat-icon:active{transform:scale(.88);opacity:.7}
 
   /* Empty state */
   .empty-state{padding:32px 16px}
@@ -1173,7 +1190,7 @@ function renderExpenses() {
   el.innerHTML = '<div class="exp-table">'+sorted.map(e=>{
     const m = CAT[e.category]||CAT['Other'];
     return `<div class="exp-row">
-      <div class="exp-cat-icon" style="background:${m.c}22;border:1px solid ${m.c}44">${m.e}</div>
+      <div class="exp-cat-icon" style="background:${m.c}22;border:1px solid ${m.c}44" data-toggle="${e.id}" title="Toggle paid">${m.e}</div>
       <div class="exp-info" data-toggle="${e.id}">
         <div class="exp-name${e.paid?' paid':''}">${esc(e.description)}</div>
         <div class="exp-meta">${esc(e.category)} · ${fmtD(e.date)}</div>
@@ -1273,6 +1290,9 @@ document.addEventListener('keydown', e => {
     if (card) { e.preventDefault(); navigate(card.dataset.nav); }
   }
 });
+
+// iOS: ensure :active fires immediately on stat cards (touch)
+document.addEventListener('touchstart', () => {}, {passive: true});
 
 // ════════════════════════════════════════
 // SETUP & INIT
